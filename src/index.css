@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@import "tailwindcss-animated";
+@import "bootstrap-icons/font/bootstrap-icons";
+
+@font-face {
+  font-family: "BigBlueTerm";
+  src: url("/fonts/BigBlueTerm437NerdFont-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  background-color: #11111b;
+}
+
+button, img {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+button:active, a:active {
+  transform: scale(0.95);
+  outline: 0;
+}
+
+*:focus {
+  outline: 2px solid #45475a;
+}
+
+div[contenteditable]:focus, .outline-none {
+  outline: none !important;
+}
+
+::selection {
+  background-color: #bb83ff;
+  color: #cdd6f4;
+}
+
+.scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-hide {
+  -ms-overflow-style: none; /* IE y Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scroll-black::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.scroll-black::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 10px;
+}
