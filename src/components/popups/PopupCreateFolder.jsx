@@ -26,6 +26,8 @@ export default function PopupCreateFolder({ createFolder, onClose }) {
         sub_folders: [],
         folder_items: [{folderItem: folderItem, itemColor: itemColor, itemURL: folderItemURL}],
       });
+
+      onClose();
     } else {
       setEmptyInputWarning(true);
       setTimeout(() => {

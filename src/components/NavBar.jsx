@@ -31,7 +31,7 @@ export default function NavBar() {
   }
 
   return (
-    <Fragment >
+    <Fragment>
       {folders.map((folder, index)=> (
         <Fragment key={folder.folder_id}>
           <button
