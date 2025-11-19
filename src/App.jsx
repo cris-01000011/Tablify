@@ -12,7 +12,7 @@ export default function App() {
       </nav>
       <div className="relative flex flex-row flex-1 gap-[0.5%] w-full">
         <ImageStorage />
-        <div className="flex flex-col gap-5 flex-1 bg-[#1e1e2e] p-2 rounded-2xl border-2 border-[#313244]">
+        <div className="flex flex-col gap-3 flex-1 bg-[#1e1e2e] p-2 rounded-2xl border-2 border-[#313244]">
           <InputSearch />
           <QuickAccess />
         </div>
