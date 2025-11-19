@@ -25,6 +25,10 @@ button:active, a:active {
   outline: 0;
 }
 
+button {
+  cursor: pointer;
+}
+
 *:focus {
   outline: 2px solid #45475a;
 }
