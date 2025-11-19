@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, Fragment } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useGlobalPopup } from "../contexts/GlobalPopupContext";
 
 export default function InputSearch() {
@@ -104,7 +104,7 @@ export default function InputSearch() {
         e.preventDefault();
       }}
       autoComplete="off"
-      className="flex items-center w-full"
+      className="flex items-center w-full px-1"
     >
       <a
         hidden

@@ -77,7 +77,7 @@ export default function imagetorage() {
             e.preventDefault();
             openPopup("PopupWidthImage", { imageWidth: imageWidth, setImageWidth: setImageWidth });
           }}
-          className="group relative h-full cursor-pointer animate-fade animate-delay-[200ms]"
+          className="group relative h-full cursor-pointer animate-fade animate-delay-[300ms]"
           style={{ width: imageWidth }}
         >
           <img src={image} alt="Imagen guardada" className="absolute w-full h-full object-cover object-center rounded-2xl border-2 border-[#313244]" />
@@ -85,8 +85,8 @@ export default function imagetorage() {
             <button className="group-hover:block hidden bg-[#1e1e2e] rounded-full px-2 cursor-pointer animate-fade">
               Choose Image / Gif
             </button>
-            <input hidden ref={inputRef} type="file" accept="image/*" onChange={handleFileChange} />
           </div>
+          <input hidden ref={inputRef} type="file" accept="image/*" onChange={handleFileChange} />
         </div>
       ) : (
         <button onClick={() => inputRef.current.click()} className="bg-[#1e1e2e] hover:bg-[#313244] border-2 border-[#313244] flex items-center justify-center w-[30%] h-full rounded-2xl transition-colors duration-500 cursor-pointer">

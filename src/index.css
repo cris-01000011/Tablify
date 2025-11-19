@@ -56,3 +56,37 @@ div[contenteditable]:focus, .outline-none {
   background-color: rgba(255,255,255,0.1);
   border-radius: 10px;
 }
+
+@keyframes open {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes close {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+.animate-open {
+  animation: open 0.2s linear;
+}
+
+.animate-close {
+  animation: close 0.2s ease;
+}
+
+dialog::backdrop {
+  background: transparent;
+}

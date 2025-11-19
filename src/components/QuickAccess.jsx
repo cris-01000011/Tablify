@@ -6,14 +6,14 @@ export default function QuickAccess() {
   const { quickAccess, setQuickAccess } = useQuickAccess();
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-2 place-items-center max-h-[calc(100vh-135px)] overflow-y-auto scroll-hide">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-2 pt-1 place-items-center max-h-[calc(100vh-75px)] overflow-y-auto scroll-hide">
       {quickAccess.map(qa => (
         <a
           key={qa.quick_access_id}
           href={qa.quick_access_url}
-          className={`${qa.quick_access_colors} flex items-center justify-center w-[100px] min-h-[85px] max-h-[85px] px-[2px] rounded-2xl`}
+          className={`${qa.quick_access_colors} flex items-center justify-center w-[100px] h-22 p-[2px] rounded-2xl`}
         >
-          <div className="hover:backdrop-blur-3xl hover:bg-[rgba(49,50,68,0.2)] transition-colors duration-500 bg-[#313244] flex flex-col w-full h-[81px] rounded-[15px]">
+          <div className="hover:backdrop-blur-3xl hover:bg-[#31324444] transition-colors duration-300 bg-[#313244] flex flex-col w-full h-full rounded-2xl">
             <div className="flex items-center justify-center text-3xl w-full h-2/3">
               <i className={`bi bi-${qa.quick_access_icon}`}></i>
             </div>
@@ -29,7 +29,7 @@ export default function QuickAccess() {
           e.preventDefault();
           openPopup("PopupEditQuickAccess");
         }}
-        className="bg-[#313244] flex items-center justify-center w-[100px] h-[85px] rounded-2xl cursor-pointer"
+        className="bg-[#313244] hover:bg-[#45475a] transition-colors duration-300 flex items-center justify-center w-[100px] h-[85px] rounded-2xl cursor-pointer"
       >
         <i className="bi bi-plus"></i>
       </button>
