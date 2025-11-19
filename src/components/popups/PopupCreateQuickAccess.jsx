@@ -49,8 +49,8 @@ export default function PopupCreateQuickAccess({ onClose }) {
       </div>
 
       <div className="flex flex-row lg:flex-col items-center justify-start lg:justify-center w-full gap-3 lg:gap-1">
-        <div className={`${PaletteMochaGradient[quickAccessColor]} transition-colors duration-[1000ms] p-[2px] rounded-sm lg:rounded-2xl`}>
-          <div className="bg-[#313244] text-[25px] flex items-center justify-center w-[35px] h-[35px] lg:w-[75px] lg:h-[75px] rounded-sm lg:rounded-2xl">
+        <div className={`${PaletteMochaGradient[quickAccessColor]} w-20 h-20 transition-colors duration-[500ms] p-[2px] rounded-sm lg:rounded-2xl`}>
+          <div className="bg-[#313244] text-[25px] flex items-center justify-center w-[35px] h-[35px] lg:w-full lg:h-full rounded-sm lg:rounded-2xl">
             <i className={`bi bi-${quickAccessIcon}`}></i>
           </div>
         </div>
