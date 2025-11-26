@@ -49,7 +49,7 @@ export default function PopupCreateQuickAccess({ onClose }) {
       </div>
 
       <div className="flex flex-row lg:flex-col items-center justify-start lg:justify-center w-full gap-3 lg:gap-1">
-        <div className={`${PaletteMochaGradient[quickAccessColor]} w-20 h-20 transition-colors duration-[500ms] p-[2px] rounded-sm lg:rounded-2xl`}>
+        <div className={`${PaletteMochaGradient[quickAccessColor]} lg:w-20 lg:h-20 transition-colors duration-[500ms] p-[2px] rounded-sm lg:rounded-2xl`}>
           <div className="bg-[#313244] text-[25px] flex items-center justify-center w-[35px] h-[35px] lg:w-full lg:h-full rounded-sm lg:rounded-2xl">
             <i className={`bi bi-${quickAccessIcon}`}></i>
           </div>
@@ -60,12 +60,12 @@ export default function PopupCreateQuickAccess({ onClose }) {
           type="text"
           name="selectedIcon"
           id="selectedIcon"
-          value={quickAccessIcon} 
+          value={quickAccessIcon}
           onChange={(e) => setQuickAccessIcon(e.target.value)}
           className="border-1 focus:border-[#45475a] w-full lg:w-[150px] px-1"
         />
       </div>
-      
+
       <div className="flex flex-col gap-1 w-full">
         <label htmlFor="name">NAME</label>
         <input type="text" name="name" id="name"
@@ -75,23 +75,23 @@ export default function PopupCreateQuickAccess({ onClose }) {
         />
         <label htmlFor="url">URL</label>
         <input type="text" name="url" id="url"
-        value={quickAccessUrl}
-        onChange={(e) => setQuickAccessUrl(e.target.value)}
-        className="focus:text-[#a6adc8] border-1 focus:border-[#45475a] px-1 mb-1" />
+          value={quickAccessUrl}
+          onChange={(e) => setQuickAccessUrl(e.target.value)}
+          className="focus:text-[#a6adc8] border-1 focus:border-[#45475a] px-1 mb-1" />
       </div>
 
       <div className="flex flex-row gap-1">
-       {PaletteMocha.map((color, index) => (
-        <button
-          key={index}
-          onClick={() => {
-            setQuickAccessColor(index);
-            setQuickAccessGradientColors(PaletteMochaGradient[index]);
-          }}
-          className={`${quickAccessColor === index ? "bg-[#6c7086]" : "bg-[#45475a]"} bi bi-circle-fill ${color} flex items-center justify-center p-1 rounded-sm`}
-         >
-        </button>
-       ))}
+        {PaletteMocha.map((color, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              setQuickAccessColor(index);
+              setQuickAccessGradientColors(PaletteMochaGradient[index]);
+            }}
+            className={`${quickAccessColor === index ? "bg-[#6c7086]" : "bg-[#45475a]"} bi bi-circle-fill ${color} flex items-center justify-center p-1 rounded-sm`}
+          >
+          </button>
+        ))}
       </div>
 
       <div className="flex items-center justify-end w-full gap-1">

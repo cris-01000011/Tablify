@@ -4,6 +4,12 @@ import QuickAccess from "./components/QuickAccess.jsx";
 import InputSearch from "./components/InputSearch.jsx";
 
 export default function App() {
+  const fetchUsers = async () => {
+    const res = await fetch("http://localhost:3001/folders");
+    return res.json();
+  }
+
+  console.log(fetchUsers());
 
   return (
     <div className="bg-[#11111b] flex flex-col w-screen h-screen p-2 gap-[1%] overflow-hidden text-[#cdd6f4]">
