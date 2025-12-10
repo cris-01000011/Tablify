@@ -3,94 +3,101 @@
 @import "bootstrap-icons/font/bootstrap-icons";
 
 @font-face {
-  font-family: "BigBlueTerm";
-  src: url("/fonts/BigBlueTerm437NerdFont-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+	font-family: "BigBlueTerm";
+	src: url("/fonts/BigBlueTerm437NerdFont-Regular.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
 }
 
 body {
-  background-color: #11111b;
+	background-color: #11111b;
 }
 
-button, img {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-button:active, a:active {
-  transform: scale(0.95);
-  outline: 0;
+button,
+img {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 button {
-  cursor: pointer;
+	cursor: pointer;
 }
 
-*:focus {
-  outline: 2px solid #45475a;
+.outline-none:focus {
+	outline: none;
 }
 
-div[contenteditable]:focus, .outline-none {
-  outline: none !important;
+input:focus {
+	outline: 2px solid #45475a;
+}
+
+input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 1000px #313244 inset;
+	-webkit-text-fill-color: #cdd6f4;
+	color: #cdd6f4;
+	caret-color: #cdd6f4;
 }
 
 ::selection {
-  background-color: #bb83ff;
-  color: #cdd6f4;
+	background-color: #bb83ff;
+	color: #cdd6f4;
 }
 
 .scroll-hide::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 
 .scroll-hide {
-  -ms-overflow-style: none; /* IE y Edge */
-  scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE y Edge */
+	scrollbar-width: none; /* Firefox */
 }
 
 .scroll-black::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+	background-color: #313244;
+	width: 12px;
+	height: 12px;
 }
 
 .scroll-black::-webkit-scrollbar-thumb {
-  background-color: rgba(255,255,255,0.1);
-  border-radius: 10px;
+	background-color: #585b70;
 }
 
+/* animations - keyframes */
+
 @keyframes open {
-  from {
-    opacity: 0;
-    transform: scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+	from {
+		opacity: 0;
+		transform: scale(0);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
 }
 
 @keyframes close {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0);
-  }
+	from {
+		opacity: 1;
+		transform: scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: scale(0);
+	}
 }
 
+/* animations - classes */
+
 .animate-open {
-  animation: open 0.2s linear;
+	animation: open 0.2s linear;
 }
 
 .animate-close {
-  animation: close 0.2s ease;
+	animation: close 0.2s ease;
 }
 
 dialog::backdrop {
-  background: transparent;
+	background: transparent;
 }

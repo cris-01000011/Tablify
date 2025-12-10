@@ -1,22 +1,37 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "./AuthContext";
+import { useLocalStorage } from "./LocalStorageContext";
 
+const API_URL = import.meta.env.VITE_API_URL;
 const QuickAccessContext = createContext();
+export const useQuickAccessService = () => useContext(QuickAccessContext);
 
-export const useQuickAccess = () => useContext(QuickAccessContext);
+export const QuickAccessContextProvider = ({ children }) => {
+	const { isAuth } = useAuth();
+	const { store } = useLocalStorage();
+	const [quickAccess, setQuickAccess] = useState([]);
 
-export const QuickAccessProvider = ({ children }) => {
-  const [quickAccess, setQuickAccess] = useState(() => {
-    const isQuickAccess = localStorage.getItem("QuickAccess");
-    return isQuickAccess ? JSON.parse(isQuickAccess) : []; 
-  });
+	const refreshQuickAccess = async () => {
+		if (!isAuth) return setQuickAccess(store.QuickAccess);
 
-  useEffect(() => {
-    localStorage.setItem("QuickAccess", JSON.stringify(quickAccess))
-  }, [quickAccess])
+		try {
+			const res = await fetch(`${API_URL}/quick-access`, {
+				credentials: "include",
+			});
+			if (!res.ok) throw new Error();
+			setQuickAccess(await res.json());
+		} catch {
+			setQuickAccess([]);
+		}
+	};
 
-  return (
-    <QuickAccessContext.Provider value={{ quickAccess, setQuickAccess }}>
-      {children}
-    </QuickAccessContext.Provider>
-  );
-}
+	useEffect(() => {
+		refreshQuickAccess();
+	}, [isAuth, store.QuickAccess]);
+
+	return (
+		<QuickAccessContext.Provider value={{ quickAccess, refreshQuickAccess }}>
+			{children}
+		</QuickAccessContext.Provider>
+	);
+};

@@ -15,14 +15,14 @@ export default function imagetorage() {
   useEffect(() => {
     const request = indexedDB.open("UserImageDB", 1);
 
-    request.onupgradeneeded = function (e) {
+    request.onupgradeneeded = function(e) {
       const db = e.target.result;
       if (!db.objectStoreNames.contains("image")) {
         db.createObjectStore("image");
       }
     };
 
-    request.onsuccess = function () {
+    request.onsuccess = function() {
       loadImageFromIndexedDB(setImage);
     };
   }, []);
@@ -33,7 +33,7 @@ export default function imagetorage() {
 
   function saveImageToIndexedDB(file) {
     const request = indexedDB.open("UserImageDB", 1);
-    request.onsuccess = function (e) {
+    request.onsuccess = function(e) {
       const db = e.target.result;
       const tx = db.transaction("image", "readwrite");
       const store = tx.objectStore("image");
@@ -46,12 +46,12 @@ export default function imagetorage() {
 
   function loadImageFromIndexedDB(callback) {
     const request = indexedDB.open("UserImageDB", 1);
-    request.onsuccess = function (e) {
+    request.onsuccess = function(e) {
       const db = e.target.result;
       const tx = db.transaction("image", "readonly");
       const store = tx.objectStore("image");
       const getRequest = store.get("myImage");
-      getRequest.onsuccess = function () {
+      getRequest.onsuccess = function() {
         const file = getRequest.result;
         if (file) {
           const url = URL.createObjectURL(file);
@@ -77,7 +77,7 @@ export default function imagetorage() {
             e.preventDefault();
             openPopup("PopupWidthImage", { imageWidth: imageWidth, setImageWidth: setImageWidth });
           }}
-          className="group relative h-full cursor-pointer animate-fade animate-delay-[300ms]"
+          className="group relative h-full cursor-pointer"
           style={{ width: imageWidth }}
         >
           <img src={image} alt="Imagen guardada" className="absolute w-full h-full object-cover object-center rounded-2xl border-2 border-[#313244]" />

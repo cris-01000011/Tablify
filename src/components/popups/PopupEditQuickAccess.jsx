@@ -1,120 +1,128 @@
-import { Fragment, useState, useEffect, useRef } from "react";
-import { useQuickAccess } from "../../contexts/QuickAccessContext";
+import { useState, useEffect } from "react";
+import { useLocalStorage } from "../../contexts/LocalStorageContext.jsx";
 import { useGlobalPopup } from "../../contexts/GlobalPopupContext";
-import QuickAcccessIcon from "../QuickAccessIcon";
+import { MochaPaletteFirst } from "../../data/ColorPalette.js";
+import { useQuickAccessService } from "../../contexts/QuickAccessContext.jsx";
+import { useQuickAccess } from "../../hooks/useQuickAccess.jsx";
 
 export default function PopupEditQuickAccess({ onClose }) {
-  const { openPopup } = useGlobalPopup();
-  const { quickAccess, setQuickAccess } = useQuickAccess();
+	const { openPopup } = useGlobalPopup();
+	const { store, setValue } = useLocalStorage();
+	const { quickAccess } = useQuickAccessService();
+	const { isQuickAccessChanged, updateQuickAccess, deleteQuickAccess } =
+		useQuickAccess();
 
-  const  [changeQuickAccessIcon, setChangeQuickAccessIcon] = useState({
-    isChanging: false,
-    index: 0,
-    quickAccessIcon: "",
-    quickAccessColors: ""
-  });
+	const [quickAccessEditable, setQuickAccessEditable] = useState([]);
 
-  const firstLinkRef = useRef(null);
-  
-  useEffect(() => {
-    if (firstLinkRef.current) {
-      firstLinkRef.current.focus();
-    }
-  }, [changeQuickAccessIcon]);
+	useEffect(() => {
+		setQuickAccessEditable(quickAccess);
+	}, [quickAccess]);
 
-  const handleChangeQuickAccess = (index, field, value) => {
-    setQuickAccess(prev => {
-      const updatedQuickAccess = [...prev];
-      updatedQuickAccess[index] = {...updatedQuickAccess[index], [field]: value};
-      return updatedQuickAccess;
-    });
-  }
+	const handleChangeName = (id, value) => {
+		setQuickAccessEditable((prev) =>
+			prev.map((qa) =>
+				qa.quick_access_id === id ? { ...qa, name: value } : qa,
+			),
+		);
+	};
 
-  const handleDeleteQuickAccess = (quick_access_id) => {
-    const updatedQuickAccess = quickAccess.filter(qa => qa.quick_access_id !== quick_access_id);
-    setQuickAccess(updatedQuickAccess);
-  }
+	const handleChangeUrl = (id, value) => {
+		setQuickAccessEditable((prev) =>
+			prev.map((qa) =>
+				qa.quick_access_id === id ? { ...qa, url: value } : qa,
+			),
+		);
+	};
 
-  return (
-    <div className="flex flex-col gap-2 max-w-[300px] sm:max-w-[500px] p-2">
-      {changeQuickAccessIcon.isChanging ? (
-        <QuickAcccessIcon
-          index={changeQuickAccessIcon.index}
-          quickAccessIcon={changeQuickAccessIcon.quickAccessIcon}
-          quickAccessColors={changeQuickAccessIcon.quickAccessColors}
-          onBack={() => setChangeQuickAccessIcon(prev => ({...prev, isChanging: false}))}
-        />
-      ) : (
-        <Fragment>
-          <div className="bg-[#313244] grid grid-cols-2">
-            <button
-              type="button"
-              onClick={() => openPopup("PopupCreateQuickAccess")}
-              className="cursor-pointer"
-            >
-              Create
-            </button>
-            <button
-              type="button"
-              onClick={() => openPopup("PopupCreateQuickAccess")}
-              className="bg-[#45475a] cursor-pointer"
-            >
-              Edit
-            </button>
-          </div>
+	return (
+		<div className="flex flex-col gap-2 w-auto p-1">
+			<div className="bg-[#313244] grid grid-cols-2 mt-1">
+				<button
+					type="button"
+					onClick={() => openPopup("PopupCreateQuickAccess")}
+				>
+					Create
+				</button>
 
-          <div className="bg-[#313244] flex flex-col items-center max-h-[216px] flex-1 gap-2 overflow-y-auto scroll-hide p-2">
-            {quickAccess.map((qa, index) => (
-              <div key={index} className="flex flex-row w-full gap-2">
-                <div className="w-1/2 flex gap-2">
-                  <button
-                    ref={index === 0 ? firstLinkRef : null}
-                    onClick={() => setChangeQuickAccessIcon({
-                      isChanging: true,
-                      index: index,
-                      quickAccessIcon: qa.quick_access_icon,
-                      quickAccessColors: qa.quick_access_colors
-                    })}
-                    className={`${qa.quick_access_colors} flex items-center justify-center px-1 rounded-sm cursor-pointer`}
-                  >
-                    <i className={`bi bi-${qa.quick_access_icon}`}></i>
-                  </button>
-                  <input
-                    type="text"
-                    value={qa.quick_access_name}
-                    onChange={(e) => handleChangeQuickAccess(index, "quick_access_name", e.target.value)}
-                    className="w-[100px] lg:w-[200px] px-1 truncate"
-                  />
-                </div>
+				<button type="button" className="bg-[#45475a]">
+					Edit
+				</button>
+			</div>
 
-                <div className="w-1/2 flex gap-2">
-                  <input
-                    type="text"
-                    value={qa.quick_access_url}
-                    onChange={(e) => handleChangeQuickAccess(index, "quick_access_url", e.target.value)}
-                    className="w-[100px] lg:w-[200px] px-1 truncate"
-                  />
-                  <button
-                    onClick={() => handleDeleteQuickAccess(qa.quick_access_id)}
-                    className="bg-[#45475a] px-1 cursor-pointer"
-                  >
-                      <i className="bi bi-x"></i>
-                  </button>
-                </div>
+			<div className="bg-[#313244] flex flex-col items-center min-w-69 min-h-62 max-h-62 flex-1 gap-2 overflow-y-auto scroll-hide p-2">
+				{quickAccessEditable.map((qa) => (
+					<div key={qa.quick_access_id} className="flex flex-row w-auto gap-2">
+						<button
+							type="button"
+							onClick={() =>
+								openPopup("PopupQuickAccessIcon", {
+									quickAccessId: qa.quick_access_id,
+									quickAccessIcon: qa.icon,
+									colorIndex: MochaPaletteFirst.indexOf(qa.first_color),
+								})
+							}
+							className="flex items-center justify-center text-[#585b70] px-1"
+							style={{
+								background: `linear-gradient(to right, ${qa.first_color}, ${qa.second_color})`,
+							}}
+						>
+							<span
+								className={`bi bi-${qa.icon} flex items-center justify-center`}
+							></span>
+						</button>
 
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center justify-end w-full">
-            <button
-              onClick={() => onClose()}
-              className="bg-[#45475a] px-5 cursor-pointer"
-            >
-              <i className="bi bi-x"></i>
-            </button>
-          </div>
-        </Fragment>
-      )}
-    </div>
-  );
+						<input
+							id={`name-${qa.quick_access_id}`}
+							type="text"
+							autoComplete="off"
+							value={qa.name}
+							onChange={(e) =>
+								handleChangeName(qa.quick_access_id, e.target.value)
+							}
+							className="w-24 lg:w-42 px-1 truncate outline-none"
+						/>
+
+						<input
+							id={`url-${qa.quick_access_id}`}
+							type="text"
+							autoComplete="off"
+							value={qa.url}
+							onChange={(e) =>
+								handleChangeUrl(qa.quick_access_id, e.target.value)
+							}
+							className="w-24 lg:w-42 px-1 truncate outline-none"
+						/>
+
+						<button
+							type="button"
+							disabled={isQuickAccessChanged(quickAccess, qa)}
+							onClick={() =>
+								updateQuickAccess(qa.quick_access_id, {
+									name: qa.name,
+									url: qa.url,
+								})
+							}
+							className="disabled:text-[#6c7086] bg-[#45475a] px-1"
+						>
+							<span className="bi bi-check flex items-center"></span>
+						</button>
+
+						<button
+							type="button"
+							onClick={() => deleteQuickAccess(qa.quick_access_id)}
+							className="bg-[#45475a] px-1"
+						>
+							<span className="bi bi-x flex items-center"></span>
+						</button>
+					</div>
+				))}
+			</div>
+
+			<div className="flex items-center justify-end w-full">
+				<button onClick={onClose} className="bg-[#45475a] px-5">
+					<span className="bi bi-x flex items-center py-1"></span>
+				</button>
+			</div>
+		</div>
+	);
 }

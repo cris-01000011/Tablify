@@ -1,199 +1,120 @@
-import { useState, useEffect, useRef, Fragment } from "react";
-import PaletteMocha from "../../color_palettes/PaletteMocha";
-import { useFolders } from "../../contexts/FoldersContext";
+import { useEffect, useState } from "react";
 import { useGlobalPopup } from "../../contexts/GlobalPopupContext";
+import { useFolderItem } from "../../hooks/useFolderItem";
+import { useFolderService } from "../../contexts/FolderContext";
 
-export default function PopupEditFolder({ folderIndex, onClose }) {
-  const { folders, setFolders } = useFolders();
-  const { openPopup } = useGlobalPopup();
+export default function PopupEditFolder({ folderId, onClose }) {
+	const { openPopup } = useGlobalPopup();
+	const { updateFolderItems, deleteFolderItem, isItemChanged } =
+		useFolderItem();
+	const { folders } = useFolderService();
 
-  const [folderItems, setFolderItems] = useState(folders[folderIndex].folder_items);
+	const [items, setItems] = useState([]);
+	const folder = folders.find((f) => f.folder_id === folderId);
 
-  const [isEditingFolder, setIsEditingFolder] = useState(false);
-  const [folderItem, setFolderItem] = useState("");
-  const [itemURL, setItemURL] = useState("");
-  const [itemColor, setItemColor] = useState(PaletteMocha[0]);
+	useEffect(() => {
+		if (folder) setItems(folder.items);
+	}, [folder]);
 
-  const [emptyInputWarning, setEmptyInputWarning] = useState(false);
+	const handleChangeName = (id, value) => {
+		setItems((prev) =>
+			prev.map((it) =>
+				it.folder_item_id === id ? { ...it, name: value } : it,
+			),
+		);
+	};
 
-  const firstLinkRef = useRef(null);
-  
-  useEffect(() => {
-    if (firstLinkRef.current) {
-      firstLinkRef.current.focus();
-    }
-  }, [isEditingFolder, folderIndex]);
+	const handleChangeURL = (id, value) => {
+		setItems((prev) =>
+			prev.map((it) => (it.folder_item_id === id ? { ...it, url: value } : it)),
+		);
+	};
 
-  useEffect(() => {
-    setFolderItems(folders[folderIndex].folder_items);
-  }, [folders])
-    
-  const handleItemChange = (index, field, value) => {
-    const updatedItems = [...folderItems];
-    updatedItems[index] = {
-      ...updatedItems[index],
-      [field]: value
-    };
+	return (
+		<div className="flex flex-col gap-2 w-auto p-2">
+			<div className="bg-[#313244] grid grid-cols-2 w-full">
+				<button
+					type="button"
+					onClick={() => openPopup("PopupCreateFolderItem", { folderId })}
+				>
+					Create
+				</button>
+				<button type="button" className="bg-[#45475a]">
+					Edit
+				</button>
+			</div>
 
-    const updatedFolders = [...folders];
-    updatedFolders[folderIndex] = {
-      ...updatedFolders[folderIndex],
-      folder_items: updatedItems
-    };
+			<div className="bg-[#313244] flex flex-col min-h-52 max-h-52 flex-1 gap-2 overflow-y-auto scroll-hide p-2">
+				{items.map((item) => (
+					<div
+						key={item.folder_item_id}
+						className="flex flex-row items-center w-full gap-2"
+					>
+						<button className="bg-[#45475a] flex-1 rounded-sm">
+							<i
+								className="bi bi-circle-fill p-1"
+								style={{ color: item.color }}
+							></i>
+						</button>
 
-    setFolders(updatedFolders);
-  };
+						<div className="w-24 lg:w-42 flex items-center gap-1">
+							<input
+								id={`name-${item.folder_item_id}`}
+								autoComplete="off"
+								type="text"
+								value={item.name}
+								onChange={(e) =>
+									handleChangeName(item.folder_item_id, e.target.value)
+								}
+								className="w-full px-1 truncate outline-none"
+							/>
+						</div>
 
-  const addItemToFolder = () => {
-    if (!folderItem || !itemURL) {
-      setEmptyInputWarning(true);
-      setTimeout(() => {
-        setEmptyInputWarning(false);
-      }, 1500);
-      return;
-    };
+						<div className="w-24 lg:w-42 flex items-center gap-1">
+							<input
+								id={`url-${item.folder_item_id}`}
+								autoComplete="off"
+								type="text"
+								value={item.url}
+								onChange={(e) =>
+									handleChangeURL(item.folder_item_id, e.target.value)
+								}
+								className="w-full px-1 truncate outline-none"
+							/>
+						</div>
 
-    const newItem = {
-      folderItem,
-      itemURL,
-      itemColor
-    };
+						<button
+							type="button"
+							disabled={isItemChanged(item, folder.items)}
+							onClick={() =>
+								updateFolderItems(
+									folderId,
+									item.folder_item_id,
+									item.name,
+									item.url,
+									item.color,
+								)
+							}
+							className="disabled:text-[#6c7086] bg-[#45475a] px-1"
+						>
+							<i className="bi bi-check"></i>
+						</button>
 
-    const updatedFolders = [...folders];
-    updatedFolders[folderIndex] = {
-      ...updatedFolders[folderIndex],
-      folder_items: [...updatedFolders[folderIndex].folder_items, newItem]
-    };
-
-    setFolders(updatedFolders);
-    setFolderItem("");
-    setItemURL("");
-    setItemColor(PaletteMocha[0]);
-  };
-
-  const deleteItem = (itemIndex) => {
-    const updatedItems = folderItems.filter((_, i) => i !== itemIndex);
-
-    const updatedFolders = [...folders];
-    updatedFolders[folderIndex] = {
-      ...updatedFolders[folderIndex],
-      folder_items: updatedItems
-    };
-
-    setFolders(updatedFolders);
-  };
-
-  const deleteFolder = (folderId) => {
-    const updatedFolders = folders.filter(f => f.folder_id !== folderId);
-    setFolders(updatedFolders);
-    onClose();
-  };
-
-  return(
-    <div className="flex flex-col gap-2 max-w-[300px] sm:max-w-[500px] p-2">
-      <div className="bg-[#313244] grid grid-cols-2">
-        <button
-          type="button"
-          onClick={() => setIsEditingFolder(false)}
-          className={`${!isEditingFolder && "bg-[#45475a]"} cursor-pointer`}
-        >
-          Create
-        </button>
-        <button
-          type="button"
-          onClick={() => setIsEditingFolder(true)}
-          className={`${isEditingFolder && "bg-[#45475a]"} cursor-pointer`}
-        >
-          Edit
-        </button>
-      </div>
-
-      {isEditingFolder ? (
-        <Fragment>
-          <div className="bg-[#313244] flex flex-col max-h-[216px] flex-1 gap-2 overflow-y-auto scroll-hide p-2">
-            {folderItems.map((item, index) => (
-              <div key={index} className="flex flex-row items-center w-full gap-2">
-                <button
-                  ref={index === 0 ? firstLinkRef : null}
-                  className="bg-[#45475a] flex items-center justify-center p-1 rounded-sm"
-                >
-                  <i className={`${item.itemColor} bi bi-circle-fill leading-none`}></i>
-                </button>
-                <div className="w-1/2 flex items-center gap-1">
-                  <input
-                    type="text"
-                    value={item.folderItem}
-                    onChange={(e) => handleItemChange(index, "folderItem", e.target.value)}
-                    className="flex-1 w-full px-1 truncate"
-                  />
-                </div>
-                <div className="w-1/2 flex items-center gap-1">
-                  <input
-                    type="text"
-                    value={item.itemURL}
-                    onChange={(e) => handleItemChange(index, "itemURL", e.target.value)}
-                    className="w-full px-1 truncate"
-                  />
-                  <button
-                    onClick={() => deleteItem(index)}
-                    className={`bi bi-x bg-[#45475a] px-1`}
-                  ></button>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center justify-end w-full">
-            <button
-              onClick={() => onClose()}
-              className="bg-[#45475a] px-5 cursor-pointer"
-            >
-              <i className="bi bi-x"></i>
-            </button>
-          </div>
-        </Fragment>  
-      ) : (
-        <div className="flex flex-col pl-2 gap-2 w-full">
-          <label htmlFor="folder_item">Folder Item</label>
-          <input autoFocus type="text" name="folder_item" id="folder_item" value={folderItem} onChange={(e) => setFolderItem(e.target.value)}
-          className="border-1 focus:border-[#45475a] px-1" />
-          <label htmlFor="folder_item_url">Folder Item URL</label>
-          <input type="text" name="folder_item_url" id="folder_item_url" value={itemURL} onChange={(e) => setItemURL(e.target.value)}
-          className="border-1 focus:border-[#45475a] px-1 mb-1" />
-          <div className="flex flex-row gap-1">
-          {PaletteMocha.map((color, index) => (
-            <button key={index} onClick={() => setItemColor(color)} className={`${itemColor === color ? "bg-[#6c7086]" : "bg-[#45475a]"} bi bi-circle-fill ${color} flex items-center justify-center p-1 rounded-sm`}></button>
-          ))}
-          </div>
-          
-          <div className="flex flex-row w-ful gap-1">
-            <button
-              onClick={() => deleteFolder(folders[folderIndex].folder_id)}
-              className="px-2 cursor-pointer"
-            >
-              Delete
-            </button>
-            <button
-              onClick={addItemToFolder}
-              className="bg-[#45475a] cursor-pointer flex-1"
-            >
-              Add Item
-            </button>
-          </div>
-
-          <div className="flex flex-1 items-center justify-end w-full">
-            <div className={emptyInputWarning ? "text-[#eba0ac] flex items-center justify-start gap-1 animate-fade-left" : "hidden"}>
-              <i className="bi bi-asterisk"></i>
-              <span className="truncate">Empty Inputs</span>
-            </div>
-            <button
-              onClick={() => onClose()}
-              className="bg-[#45475a] px-5 cursor-pointer"
-            >
-              <i className="bi bi-x"></i>
-            </button>
-          </div>
-        </div>
-      )}            
-    </div>
-  );
+						<button
+							type="button"
+							onClick={() => deleteFolderItem(folderId, item.folder_item_id)}
+							className="bg-[#45475a] px-1"
+						>
+							<i className="bi bi-x"></i>
+						</button>
+					</div>
+				))}
+			</div>
+			<div className="flex items-center justify-end w-full">
+				<button onClick={onClose} className="bg-[#45475a] px-5">
+					<i className="bi bi-x"></i>
+				</button>
+			</div>
+		</div>
+	);
 }
