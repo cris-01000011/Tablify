@@ -7,6 +7,7 @@ export default function PopupSignIn({ onClose }) {
 	const { signin } = useAuthentication();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [isError, setIsError] = useState(false);
 
 	return (
 		<div className="relative flex flex-col p-2 gap-1 w-auto">
@@ -25,13 +26,26 @@ export default function PopupSignIn({ onClose }) {
 
 			<div className="flex flex-col gap-1 items-center mt-3">
 				<img src="/icon.png" alt="logo" className="w-10 h-10" />
-				<span className="text-xl font-semibold">Tablify</span>
+				{isError ? (
+					<span
+						onAnimationEnd={() => setIsError(false)}
+						className="animate-shake-error text-[#eba0ac] text-xl font-semibold"
+					>
+						Invalid Credentials
+					</span>
+				) : (
+					<span className="text-xl font-semibold">Tablify</span>
+				)}
 			</div>
 
 			<form
-				onSubmit={(e) => {
+				onSubmit={async (e) => {
 					e.preventDefault();
-					signin(email, password);
+					try {
+						await signin(email, password);
+					} catch (error) {
+						setIsError(true);
+					}
 				}}
 				className="relative flex flex-col p-2 gap-1 w-64"
 			>

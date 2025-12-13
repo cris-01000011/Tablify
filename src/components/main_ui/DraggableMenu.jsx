@@ -1,12 +1,17 @@
 import { useRef, useState, useEffect } from "react";
 import { useGlobalPopup } from "../../contexts/GlobalPopupContext";
+import { useLocalStorage } from "../../contexts/LocalStorageContext";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function DraggableMenu() {
 	const { openPopup } = useGlobalPopup();
+	const { store, setValue } = useLocalStorage();
 	const { isAuth, tablifyUser } = useAuth();
-	const ref = useRef(null);
 
+	const [isMenuHidden, setIsMenuHidden] = useState(true);
+	const [isMenuAtRight, setIsMenuAtRight] = useState(true);
+
+	const ref = useRef(null);
 	const dragDelayRef = useRef(null);
 	const draggingRef = useRef(false);
 	const pointerIdRef = useRef(null);
@@ -35,9 +40,17 @@ export default function DraggableMenu() {
 		const el = ref.current;
 		if (!el) return;
 		const rect = el.getBoundingClientRect();
+		let x = store.DraggableMenuPos.x !== -1 ? store.DraggableMenuPos.x : 0;
+		let y = store.DraggableMenuPos.y !== -1 ? store.DraggableMenuPos.y : 0;
+
+		if (x > window.innerWidth - rect.width || x === 0)
+			x = window.innerWidth - rect.width - 20;
+
+		if (y > window.innerHeight - rect.height || y === 0)
+			y = window.innerHeight - rect.height - 20;
 		setDraggableMenuPosition({
-			x: window.innerWidth - rect.width - 20,
-			y: window.innerHeight - rect.height - 20,
+			x,
+			y,
 		});
 	}, []);
 
@@ -51,7 +64,6 @@ export default function DraggableMenu() {
 			dragDelayRef.current = setTimeout(() => {
 				draggingRef.current = true;
 				pointerIdRef.current = e.pointerId;
-				el.setPointerCapture(e.pointerId);
 				const rect = el.getBoundingClientRect();
 				offsetRef.current = {
 					x: e.clientX - rect.left,
@@ -63,6 +75,7 @@ export default function DraggableMenu() {
 		function onPointerMove(e) {
 			if (!draggingRef.current || pointerIdRef.current !== e.pointerId) return;
 			setIsDraggableMenuMoved(true);
+			setIsMenuHidden(true);
 			const rect = el.getBoundingClientRect();
 			const clamped = clampPosition(
 				e.clientX - offsetRef.current.x,
@@ -75,6 +88,13 @@ export default function DraggableMenu() {
 		function onPointerUp(e) {
 			clearTimeout(dragDelayRef.current);
 			if (pointerIdRef.current !== e.pointerId) return;
+			const rect = el.getBoundingClientRect();
+			const clamped = clampPosition(
+				e.clientX - offsetRef.current.x,
+				e.clientY - offsetRef.current.y,
+				rect,
+			);
+			setValue("DraggableMenuPos", { x: clamped.x, y: clamped.y });
 			draggingRef.current = false;
 			pointerIdRef.current = null;
 			try {
@@ -110,6 +130,7 @@ export default function DraggableMenu() {
 	return (
 		<div
 			ref={ref}
+			className="relative lg:hidden flex items-center justify-center"
 			style={{
 				position: "fixed",
 				left: 0,
@@ -118,12 +139,14 @@ export default function DraggableMenu() {
 				touchAction: "none",
 				zIndex: 9999,
 			}}
-			onClick={() => {
+			onClick={(e) => {
 				if (isDraggableMenuMoved) return;
 
-				if (!isAuth) return openPopup("PopupSignIn");
+				if (e.clientX > window.innerWidth / 2) setIsMenuAtRight(true);
 
-				openPopup("PopupUser", { user: tablifyUser });
+				if (e.clientX < window.innerWidth / 2) setIsMenuAtRight(false);
+
+				setIsMenuHidden((prev) => !prev);
 			}}
 		>
 			{isAuth ? (
@@ -131,7 +154,9 @@ export default function DraggableMenu() {
 					<img
 						draggable="false"
 						className="w-full h-full "
-						src="/src/imgs/avatars/avatar-default.png"
+						src={
+							tablifyUser?.avatar || "/src/imgs/avatars/tablify/default.webp"
+						}
 						alt="avatar"
 					/>
 				</button>
@@ -140,9 +165,47 @@ export default function DraggableMenu() {
 					type="button"
 					className="bg-[#313244] border-1 border-[#45475a] flex items-center justify-center w-10 h-10 rounded-full"
 				>
-					<span className="bi bi-person-fill flex items-center justify-center text-xl"></span>
+					<span className="bi bi-list flex items-center justify-center text-xl"></span>
 				</button>
 			)}
+			<div
+				hidden={isMenuHidden}
+				onClick={(e) => e.stopPropagation()}
+				className={`${isMenuAtRight ? "right-12" : "left-12"} absolute top-0 bg-[#313244] border border-[#45475a] flex flex-row items-center justify-center gap-2 px-2 py-1 rounded-full w-auto h-auto`}
+			>
+				<button
+					title="Login"
+					type="button"
+					onClick={() => {
+						if (!isAuth) openPopup("PopupSignIn");
+
+						if (isAuth) openPopup("PopupUser", { user: tablifyUser });
+
+						setIsMenuHidden(true);
+					}}
+					className="hover:scale-125 hover:-translate-y-2 transition-all duration-400 px-2"
+				>
+					<span className="bi bi-person-fill text-xl"></span>
+				</button>
+
+				<button
+					title="Support"
+					type="button"
+					onClick={() => openPopup("PopupSupport")}
+					className="hover:scale-125 hover:-translate-y-2 transition-all duration-400 px-2"
+				>
+					<span className="bi bi-heart-fill text-xl"></span>
+				</button>
+
+				<button
+					title="Backup"
+					type="button"
+					onClick={() => openPopup("PopupBackup")}
+					className="hover:scale-125 hover:-translate-y-2 transition-all duration-400 px-2"
+				>
+					<span className="bi bi-floppy-fill text-xl"></span>
+				</button>
+			</div>
 		</div>
 	);
 }

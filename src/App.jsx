@@ -8,10 +8,7 @@ import DraggableMenu from "./components/main_ui/DraggableMenu.jsx";
 export default function App() {
 	return (
 		<div className="animate-fade animate-duration-100 bg-[#11111b] flex flex-col w-dvw h-dvh p-2 gap-[1%] overflow-hidden text-[#cdd6f4]">
-			<nav
-				onClick={(e) => e.stopPropagation()}
-				className="bg-[#1e1e2e] border-2 border-[#313244] flex flex-row items-center w-full h-[35px] gap-2 rounded-2xl px-2 py-4 overflow-x-auto scroll-hide"
-			>
+			<nav className="bg-[#1e1e2e] border-2 border-[#313244] flex flex-row items-center w-full h-[35px] gap-2 rounded-2xl px-2 py-4 overflow-x-auto scroll-hide z-1">
 				<NavBar />
 			</nav>
 			<div className="relative flex flex-row flex-1 gap-[0.5%] w-full">

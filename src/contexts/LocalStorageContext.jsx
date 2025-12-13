@@ -63,7 +63,12 @@ export const LocalStorageContextProvider = ({ children }) => {
 	const [store, setStore] = useState(() => {
 		const data = {};
 
-		const keys = ["Folders", "QuickAccess"];
+		const keys = [
+			"Folders",
+			"QuickAccess",
+			"DraggableMenuPos",
+			"AutoHideFloatNavBar",
+		];
 
 		keys.forEach((key) => {
 			const saved = localStorage.getItem(key);
@@ -76,6 +81,10 @@ export const LocalStorageContextProvider = ({ children }) => {
 			if (key === "QuickAccess" && Array.isArray(value)) {
 				value = value.map((qa) => migrateOldQuickAccess(qa));
 			}
+
+			if (key === "DraggableMenuPos" && !saved) value = { x: -1, y: -1 };
+
+			if (key === "AutoHideFloatNavBar" && !saved) value = false;
 
 			data[key] = value;
 		});

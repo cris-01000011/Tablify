@@ -6,7 +6,7 @@ export default function QuickAccess() {
 	const { quickAccess } = useQuickAccessService();
 
 	return (
-		<div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-2 pt-1 place-items-center max-h-[calc(100vh-75px)] overflow-y-auto scroll-hide">
+		<div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-2 pt-1 place-items-center max-h-[calc(100vh-112px)] overflow-y-auto scroll-hide">
 			{quickAccess.map((qa) => (
 				<a
 					key={qa.quick_access_id}

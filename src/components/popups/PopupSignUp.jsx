@@ -8,6 +8,7 @@ export default function PopupSignUp({ onClose }) {
 	const [username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [isError, setIsError] = useState(false);
 
 	return (
 		<div className="flex flex-col p-2 gap-1 w-auto">
@@ -26,13 +27,26 @@ export default function PopupSignUp({ onClose }) {
 
 			<div className="flex flex-col gap-1 items-center mt-3">
 				<img src="/icon.png" alt="logo" className="w-10 h-10" />
-				<span className="text-xl font-semibold">Tablify</span>
+				{isError ? (
+					<span
+						onAnimationEnd={() => setIsError(false)}
+						className="animate-shake-error text-[#eba0ac] text-xl font-semibold"
+					>
+						User already exist
+					</span>
+				) : (
+					<span className="text-xl font-semibold">Tablify</span>
+				)}
 			</div>
 
 			<form
-				onSubmit={(e) => {
+				onSubmit={async (e) => {
 					e.preventDefault();
-					signup(username, email, password);
+					try {
+						await signup(username, email, password);
+					} catch (error) {
+						setIsError(true);
+					}
 				}}
 				className="relative flex flex-col p-2 gap-1 w-64"
 			>

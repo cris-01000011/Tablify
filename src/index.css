@@ -88,6 +88,64 @@ input:-webkit-autofill {
 	}
 }
 
+@keyframes jump-top-in {
+	0% {
+		opacity: 0.75;
+		scale: 0.75;
+		transform: translateY(50px);
+	}
+	50% {
+		opacity: 0.75;
+		scale: 0.75;
+		transform: translateY(0);
+	}
+	100% {
+		opacity: 1;
+		scale: 1;
+	}
+}
+
+@keyframes jump-bottom-out {
+	0% {
+		opacity: 1;
+		scale: 1;
+	}
+	100% {
+		opacity: 0;
+		scale: 0;
+	}
+}
+
+@keyframes copy {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes shake-error {
+	0% {
+		transform: translateX(0);
+	}
+	5% {
+		transform: translateX(5px);
+	}
+	10% {
+		transform: translateX(-5px);
+	}
+	15% {
+		transform: translateX(5px);
+	}
+	20% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
 /* animations - classes */
 
 .animate-open {
@@ -96,6 +154,22 @@ input:-webkit-autofill {
 
 .animate-close {
 	animation: close 0.2s ease;
+}
+
+.animate-jump-top-in {
+	animation: jump-top-in 0.5s ease;
+}
+
+.animate-jump-bottom-out {
+	animation: jump-bottom-out 0.5s ease forwards;
+}
+
+.animate-copy {
+	animation: copy 0.3s ease-out;
+}
+
+.animate-shake-error {
+	animation: shake-error 2s ease-out;
 }
 
 dialog::backdrop {

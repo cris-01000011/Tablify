@@ -16,12 +16,14 @@ export function useAuthentication() {
 				name,
 				email,
 				password,
-				avatar: "/src/imgs/avatars/avatar-default.png",
+				avatar: "/src/imgs/avatars/tablify/default.webp",
 			}),
 			credentials: "include",
 		});
 
-		if (!res.ok) return;
+		if (!res.ok) {
+			throw new Error("User already exist");
+		}
 
 		refreshAuth();
 		closePopup();
@@ -35,7 +37,9 @@ export function useAuthentication() {
 			credentials: "include",
 		});
 
-		if (!res.ok) return;
+		if (!res.ok) {
+			throw new Error("Invalid credentials");
+		}
 
 		refreshAuth();
 		closePopup();

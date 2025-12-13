@@ -12,6 +12,9 @@ import PopupUser from "./PopupUser.jsx";
 import PopupCreateFolderItem from "./PopupCreateFolderItem.jsx";
 import PopupSelectIcon from "./PopupSelectIcon.jsx";
 import PopupQuickAccessIcon from "./PopupQuickAccessIcon.jsx";
+import PopupSupport from "./PopupSupport.jsx";
+import PopupSettings from "./PopupSettings.jsx";
+import PopupBackup from "./PopupBackup.jsx";
 
 export default {
 	PopupOpenFolder,
@@ -28,4 +31,7 @@ export default {
 	PopupUser,
 	PopupSelectIcon,
 	PopupQuickAccessIcon,
+	PopupSupport,
+	PopupSettings,
+	PopupBackup,
 };
