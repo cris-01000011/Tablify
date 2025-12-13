@@ -13,11 +13,7 @@ export default function PopupSignUp({ onClose }) {
 	return (
 		<div className="flex flex-col p-2 gap-1 w-auto">
 			<div className="bg-[#313244] grid grid-cols-2 w-full mt-1 mb-2">
-				<button
-					type="button"
-					onClick={() => openPopup("PopupSignIn")}
-					className="cursor-pointer"
-				>
+				<button type="button" onClick={() => openPopup("PopupSignIn")}>
 					SignIn
 				</button>
 				<button type="button" className="bg-[#45475a] cursor-pointer">
