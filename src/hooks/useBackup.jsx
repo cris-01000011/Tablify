@@ -11,10 +11,10 @@ export function useBackup() {
 	const { store, setValue } = useLocalStorage();
 	const { isAuth } = useAuth();
 	const { createFolder } = useFolder();
-	const { refreshFolders } = useFolderService();
+	const { folders, refreshFolders } = useFolderService();
 	const { createFolderItem } = useFolderItem();
 	const { createQuickAccess } = useQuickAccess();
-	const { refreshQuickAccess } = useQuickAccessService();
+	const { quickAccess, refreshQuickAccess } = useQuickAccessService();
 
 	const downloadJson = (backupObject) => {
 		const keys = Object.keys(backupObject);
@@ -36,7 +36,7 @@ export function useBackup() {
 		URL.revokeObjectURL(url);
 	};
 
-	const exportBackup = (keys) => {
+	const exportBackupLocal = (keys) => {
 		const backupObject = keys.reduce((acumulator, key) => {
 			if (store[key] !== undefined) acumulator[key] = store[key];
 
@@ -46,7 +46,31 @@ export function useBackup() {
 		downloadJson(backupObject);
 	};
 
-	const importBackupReplace = (data) => {
+	const dataSources = {
+		Folders: () => folders,
+		QuickAccess: () => quickAccess,
+	};
+
+	const exportBackup = (keys) => {
+		if (!isAuth) return exportBackupLocal(keys);
+
+		const backupObject = {};
+
+		for (const key of keys) {
+			const resolver = dataSources[key];
+
+			if (typeof resolver !== "function") continue;
+
+			const data = resolver();
+			if (data !== undefined) {
+				backupObject[key] = data;
+			}
+		}
+
+		downloadJson(backupObject);
+	};
+
+	const importBackupReplaceLocal = (data) => {
 		if (data.Folders) setValue("Folders", data.Folders);
 		if (data.QuickAccess) setValue("QuickAccess", data.QuickAccess);
 	};
@@ -60,7 +84,7 @@ export function useBackup() {
 				throw new Error("Invalid format");
 			}
 
-			if (!isAuth) return importBackupReplace(data);
+			if (!isAuth) return importBackupReplaceLocal(data);
 
 			if (data.Folders) {
 				await fetch(`${API_URL}/folders/replace`, {
