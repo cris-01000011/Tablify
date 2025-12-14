@@ -1,19 +1,13 @@
 import { useLocalStorage } from "../contexts/LocalStorageContext";
 import { useAuth } from "../contexts/AuthContext";
-import { useFolder } from "./useFolder";
 import { useFolderService } from "../contexts/FolderContext";
-import { useFolderItem } from "./useFolderItem";
-import { useQuickAccess } from "./useQuickAccess";
 import { useQuickAccessService } from "../contexts/QuickAccessContext";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export function useBackup() {
 	const { store, setValue } = useLocalStorage();
 	const { isAuth } = useAuth();
-	const { createFolder } = useFolder();
 	const { folders, refreshFolders } = useFolderService();
-	const { createFolderItem } = useFolderItem();
-	const { createQuickAccess } = useQuickAccess();
 	const { quickAccess, refreshQuickAccess } = useQuickAccessService();
 
 	const downloadJson = (backupObject) => {
