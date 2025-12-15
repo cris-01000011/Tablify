@@ -12,7 +12,7 @@ export default function PopupBackup() {
 
 	return (
 		<div className="relative flex flex-col p-2 gap-1 w-84 lg:w-124">
-			<div className="hidden bg-[#313244] lg:grid grid-cols-2 w-full mt-1 mb-4">
+			<div className="bg-[#313244] grid grid-cols-2 w-full mt-1 mb-2">
 				<button onClick={() => openPopup("PopupSettings", {})} type="button">
 					System UI
 				</button>
@@ -21,7 +21,7 @@ export default function PopupBackup() {
 				</button>
 			</div>
 
-			<div className="grid grid-cols-2 w-full gap-2 mb-4 lg:mb-4">
+			<div className="grid grid-cols-2 w-full gap-2 mb-2 lg:mb-4">
 				<button
 					onClick={() => exportBackup(["Folders"])}
 					type="button"

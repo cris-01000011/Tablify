@@ -17,13 +17,27 @@ export default function PopupSettings() {
 				</button>
 			</div>
 
-			<span>Auto-Hide FloatNavBar</span>
-			<SwitchButton
-				state={store.AutoHideFloatNavBar}
-				setState={() =>
-					setValue("AutoHideFloatNavBar", !store.AutoHideFloatNavBar)
-				}
-			/>
+			<div className="hidden lg:block">
+				<span>Auto-Hide FloatNavBar</span>
+				<SwitchButton
+					state={store.AutoHideFloatNavBar}
+					setState={() =>
+						setValue("AutoHideFloatNavBar", !store.AutoHideFloatNavBar)
+					}
+				/>
+			</div>
+			<div>
+				<span>Font BigBlueTerm437</span>
+				<SwitchButton
+					state={store.ActiveFontBigBlueTerm437}
+					setState={() =>
+						setValue(
+							"ActiveFontBigBlueTerm437",
+							!store.ActiveFontBigBlueTerm437,
+						)
+					}
+				/>
+			</div>
 		</div>
 	);
 }

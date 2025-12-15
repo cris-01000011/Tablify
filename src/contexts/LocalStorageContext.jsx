@@ -68,6 +68,7 @@ export const LocalStorageContextProvider = ({ children }) => {
 			"QuickAccess",
 			"DraggableMenuPos",
 			"AutoHideFloatNavBar",
+			"ActiveFontBigBlueTerm437",
 		];
 
 		keys.forEach((key) => {
@@ -85,6 +86,8 @@ export const LocalStorageContextProvider = ({ children }) => {
 			if (key === "DraggableMenuPos" && !saved) value = { x: -1, y: -1 };
 
 			if (key === "AutoHideFloatNavBar" && !saved) value = false;
+
+			if (key === "ActiveFontBigBlueTerm437" && !saved) value = false;
 
 			data[key] = value;
 		});
