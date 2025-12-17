@@ -38,9 +38,10 @@ export const AuthContextProvider = ({ children }) => {
 		}
 	};
 
-	useEffect(() => {
-		refreshAuth();
-	}, []);
+	// Auth
+	// useEffect(() => {
+	// 	refreshAuth();
+	// }, []);
 
 	return (
 		<AuthContext.Provider value={{ isAuth, tablifyUser, refreshAuth, logout }}>

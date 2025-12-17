@@ -149,7 +149,7 @@ export default function DraggableMenu() {
 				setIsMenuHidden((prev) => !prev);
 			}}
 		>
-			{isAuth ? (
+			{!isAuth ? (
 				<button type="button" className="w-10 h-10">
 					<img
 						draggable="false"
@@ -174,6 +174,7 @@ export default function DraggableMenu() {
 				className={`${isMenuAtRight ? "right-12" : "left-12"} absolute top-0 bg-[#313244] border border-[#45475a] flex flex-row items-center justify-center gap-2 px-2 py-1 rounded-full w-auto h-auto`}
 			>
 				<button
+					hidden
 					title="Login"
 					type="button"
 					onClick={() => {

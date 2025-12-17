@@ -42,11 +42,14 @@ export default function FloatNavBar() {
 		<div
 			className={`${floatNavBarAnimation} hidden fixed bottom-5 left-1/2 -translate-x-1/2 lg:flex items-center gap-3`}
 		>
-			{isAuth ? (
+			{!isAuth ? (
 				<button
 					type="button"
-					onClick={() => openPopup("PopupUser", { user: tablifyUser })}
-					className="w-9 h-9 hover:scale-125 hover:-translate-y-2 transition-transform duration-400"
+					onClick={() => {
+						return;
+						openPopup("PopupUser", { user: tablifyUser });
+					}}
+					className="w-9 h-9"
 				>
 					<img
 						src={
