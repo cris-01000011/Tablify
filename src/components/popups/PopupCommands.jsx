@@ -58,7 +58,7 @@ export default function PopupCommands({ onClose }) {
 						{store.SearchCommands.map((sc) => (
 							<div
 								key={sc.search_command_id}
-								className="grid grid-cols-4 items-center bg-[#313244] border-b border-[#45475a] pl-1 py-1"
+								className="grid grid-cols-4 items-center bg-[#313244] pl-1 py-1"
 							>
 								<span className="truncate pl-1">{sc.name}</span>
 								<span className="truncate">{sc.trigger}</span>
