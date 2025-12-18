@@ -199,6 +199,15 @@ export default function DraggableMenu() {
 				</button>
 
 				<button
+					title="Backup"
+					type="button"
+					onClick={() => openPopup("PopupCommands")}
+					className="hover:scale-125 hover:-translate-y-2 transition-all duration-400 px-2"
+				>
+					<span className="bi bi-terminal-fill text-xl"></span>
+				</button>
+
+				<button
 					title="Settings"
 					type="button"
 					onClick={() => openPopup("PopupSettings")}

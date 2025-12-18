@@ -69,6 +69,7 @@ export const LocalStorageContextProvider = ({ children }) => {
 			"DraggableMenuPos",
 			"AutoHideFloatNavBar",
 			"ActiveFontBigBlueTerm437",
+			"SearchCommands",
 		];
 
 		keys.forEach((key) => {

@@ -13,13 +13,7 @@ export default function InputSearch() {
 		return isSearchMethodIndex ? JSON.parse(isSearchMethodIndex) : 0;
 	});
 
-	const [searchCommands, setSearchCommands] = useState(() => {
-		const isSearchCommands = localStorage.getItem("SearchCommands");
-		return isSearchCommands ? JSON.parse(isSearchCommands) : [];
-	});
-
 	const [commandName, setCommandName] = useState("Search");
-	const [commandsLength, setCommandsLength] = useState(searchCommands.length);
 
 	const [searchMethodOptions, setSearchMethodOptions] = useState([
 		{ icon: "google", url: "https://www.google.com/search?q=" },
@@ -39,18 +33,6 @@ export default function InputSearch() {
 		);
 		setPrefixURL(searchMethodOptions[searchMethodIndex].url);
 	}, [searchMethodIndex]);
-
-	useEffect(() => {
-		localStorage.setItem("SearchCommands", JSON.stringify(searchCommands));
-
-		if (commandsLength !== searchCommands.length) {
-			openPopup("PopupCommands", {
-				searchCommands: searchCommands,
-				setSearchCommands: setSearchCommands,
-			});
-			setCommandsLength((prev) => prev + 1);
-		}
-	}, [searchCommands]);
 
 	useEffect(() => {
 		if (store.ActiveFontBigBlueTerm437) {
@@ -76,8 +58,7 @@ export default function InputSearch() {
 		const trimmedInput = inputValue.trim();
 
 		const specialCommands = {
-			":c": () =>
-				openPopup("PopupCommands", { searchCommands, setSearchCommands }),
+			":c": () => openPopup("PopupCommands"),
 			":f": () =>
 				setValue("ActiveFontBigBlueTerm437", !store.ActiveFontBigBlueTerm437),
 			":n": () => {
@@ -92,13 +73,13 @@ export default function InputSearch() {
 			return;
 		}
 
-		const matchedCommand = searchCommands.find(
-			(cmd) => cmd.commandLaunch === trimmedInput,
+		const matchedCommand = store.SearchCommands.find(
+			(cmd) => cmd.trigger === trimmedInput,
 		);
 
 		if (matchedCommand) {
-			setCommandName(matchedCommand.commandName);
-			setPrefixURL(matchedCommand.commandURL);
+			setCommandName(matchedCommand.name);
+			setPrefixURL(matchedCommand.url);
 			setInputValue("");
 			return;
 		}
