@@ -71,15 +71,6 @@ export default function FloatNavBar() {
 
 			<div className="bg-[#313244] flex items-center justify-center border-1 border-[#45475a] px-2 py-1 rounded-full">
 				<button
-					title="Support"
-					type="button"
-					onClick={() => openPopup("PopupSupport", {})}
-					className="hover:scale-125 hover:-translate-y-2 transition-all duration-400 px-2"
-				>
-					<span className="bi bi-heart-fill text-xl"></span>
-				</button>
-
-				<button
 					title="Backup"
 					type="button"
 					onClick={() => openPopup("PopupCommands", {})}
