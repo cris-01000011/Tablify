@@ -56,20 +56,3 @@ Group your favorite links into folders, enjoy beautiful quick-access icons, disp
   Example: `YouTube` → trigger: `:y` → URL: `https://www.youtube.com/results?search_query=`
 
 - **Switch engines**: Toggle between Google and Bing with one click.
-
----
-
-## How to Use
-
-Click the **(i) button** at the bottom-right of the screen to open a quick user guide anytime.
-
-<img width="1325" height="727" alt="image" src="./assets/imgs/how-to-use.png" />
-
----
-
-## ![heart](./assets/icons/heart.png) Suport
-
-I reallly apreciate if you want support this project :)
-
-[![ko-fi](./assets/icons/ko-fi.png)](https://ko-fi.com/cris01000011)
-[![paypal](./assets/icons/paypal.png)](https://www.paypal.com/paypalme/cris01000011)
