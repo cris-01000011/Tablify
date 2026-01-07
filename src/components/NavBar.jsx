@@ -8,26 +8,28 @@ export default function NavBar() {
 
 	return (
 		<Fragment>
-			{folders.map((folder) => (
-				<button
-					key={folder.folder_id}
-					onContextMenu={(e) => {
-						e.preventDefault();
-						openPopup("PopupCreateFolderItem", {
-							folderId: folder.folder_id,
-						});
-					}}
-					onClick={() =>
-						openPopup("PopupOpenFolder", {
-							folderItems: folder.items,
-						})
-					}
-					className="bg-[#313244] w-auto rounded-full px-2 flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
-				>
-					<i className="bi bi-folder2-open"></i>
-					{folder.name}
-				</button>
-			))}
+			{[...folders]
+				.sort((a, b) => a.name.localeCompare(b.name))
+				.map((folder) => (
+					<button
+						key={folder.folder_id}
+						onContextMenu={(e) => {
+							e.preventDefault();
+							openPopup("PopupCreateFolderItem", {
+								folderId: folder.folder_id,
+							});
+						}}
+						onClick={() =>
+							openPopup("PopupOpenFolder", {
+								folderItems: folder.items,
+							})
+						}
+						className="bg-[#313244] w-auto rounded-full px-2 flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+					>
+						<i className="bi bi-folder2-open"></i>
+						{folder.name}
+					</button>
+				))}
 
 			<button
 				onClick={() => openPopup("PopupCreateFolder")}
