@@ -1,5 +1,5 @@
 import { useEffect, useState, Fragment, useRef } from "react";
-import { useGlobalPopup } from "../contexts/GlobalPopupContext"
+import { useGlobalPopup } from "../contexts/GlobalPopupContext";
 
 export default function imagetorage() {
   const { openPopup } = useGlobalPopup();
@@ -15,14 +15,14 @@ export default function imagetorage() {
   useEffect(() => {
     const request = indexedDB.open("UserImageDB", 1);
 
-    request.onupgradeneeded = function(e) {
+    request.onupgradeneeded = function (e) {
       const db = e.target.result;
       if (!db.objectStoreNames.contains("image")) {
         db.createObjectStore("image");
       }
     };
 
-    request.onsuccess = function() {
+    request.onsuccess = function () {
       loadImageFromIndexedDB(setImage);
     };
   }, []);
@@ -33,7 +33,7 @@ export default function imagetorage() {
 
   function saveImageToIndexedDB(file) {
     const request = indexedDB.open("UserImageDB", 1);
-    request.onsuccess = function(e) {
+    request.onsuccess = function (e) {
       const db = e.target.result;
       const tx = db.transaction("image", "readwrite");
       const store = tx.objectStore("image");
@@ -46,12 +46,12 @@ export default function imagetorage() {
 
   function loadImageFromIndexedDB(callback) {
     const request = indexedDB.open("UserImageDB", 1);
-    request.onsuccess = function(e) {
+    request.onsuccess = function (e) {
       const db = e.target.result;
       const tx = db.transaction("image", "readonly");
       const store = tx.objectStore("image");
       const getRequest = store.get("myImage");
-      getRequest.onsuccess = function() {
+      getRequest.onsuccess = function () {
         const file = getRequest.result;
         if (file) {
           const url = URL.createObjectURL(file);
@@ -75,23 +75,45 @@ export default function imagetorage() {
           onClick={() => inputRef.current.click()}
           onContextMenu={(e) => {
             e.preventDefault();
-            openPopup("PopupWidthImage", { imageWidth: imageWidth, setImageWidth: setImageWidth });
+            openPopup("PopupWidthImage", {
+              imageWidth: imageWidth,
+              setImageWidth: setImageWidth,
+            });
           }}
           className="group relative h-full cursor-pointer"
           style={{ width: imageWidth }}
         >
-          <img src={image} alt="Imagen guardada" className="absolute w-full h-full object-cover object-center rounded-2xl border-2 border-[#313244]" />
+          <img
+            src={image}
+            alt="Imagen guardada"
+            className="absolute w-full h-full object-cover object-center rounded-2xl border-2 border-[#313244]"
+          />
           <div className="absolute bottom-0 w-full p-2">
             <button className="group-hover:block hidden bg-[#1e1e2e] rounded-full px-2 cursor-pointer animate-fade">
               Choose Image / Gif
             </button>
           </div>
-          <input hidden ref={inputRef} type="file" accept="image/*" onChange={handleFileChange} />
+          <input
+            hidden
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
         </div>
       ) : (
-        <button onClick={() => inputRef.current.click()} className="bg-[#1e1e2e] hover:bg-[#313244] border-2 border-[#313244] flex items-center justify-center w-[30%] h-full rounded-2xl transition-colors duration-500 cursor-pointer">
+        <button
+          onClick={() => inputRef.current.click()}
+          className="bg-[#1e1e2e] hover:bg-[#313244] border-2 border-[#313244] flex items-center justify-center w-[30%] h-full rounded-2xl transition-colors duration-500 cursor-pointer"
+        >
           <i className="bi bi-image text-3xl sm:text-9xl"></i>
-          <input hidden ref={inputRef} type="file" accept="image/*" onChange={handleFileChange} />
+          <input
+            hidden
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
         </button>
       )}
     </Fragment>
